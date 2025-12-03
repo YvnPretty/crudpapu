@@ -1,6 +1,6 @@
 -- Create Database
-CREATE DATABASE IF NOT EXISTS crud_app;
-USE crud_app;
+CREATE DATABASE IF NOT EXISTS  231190039;
+USE  231190039;
 
 -- Create Users Table
 CREATE TABLE IF NOT EXISTS users (
