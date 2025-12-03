@@ -73,6 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </form>
         </div>
+
+        <footer>
+            Programmed by PrettyVatt00
+        </footer>
     </div>
 </body>
 </html>

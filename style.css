@@ -200,24 +200,34 @@ input:focus {
     .container {
         padding: 1rem;
     }
-    
+
     h1 {
         font-size: 2rem;
     }
-    
+
     .table-container {
         border: 1px solid var(--border-color);
     }
-    
-    td, th {
+
+    td,
+    th {
         padding: 0.75rem;
     }
-    
+
     .actions {
         flex-direction: column;
     }
-    
+
     .btn {
         width: 100%;
     }
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-top: auto;
+    font-weight: 500;
 }

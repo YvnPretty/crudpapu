@@ -77,6 +77,10 @@ try {
                 </table>
             </div>
         </div>
+
+        <footer>
+            Programmed by PrettyVatt00
+        </footer>
     </div>
 </body>
 </html>
