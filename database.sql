@@ -1,6 +1,6 @@
 -- Create Database
-CREATE DATABASE IF NOT EXISTS  231190039;
-USE  231190039;
+CREATE DATABASE IF NOT EXISTS  crud_papu;
+USE  crud_papu;
 
 -- Create Users Table
 CREATE TABLE IF NOT EXISTS users (
