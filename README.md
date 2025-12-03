@@ -1,17 +1,17 @@
-# PHP CRUD with Stored Procedures
+# CRUD PHP con Procedimientos Almacenados
 
-A responsive CRUD application built with PHP, MySQL Stored Procedures, and a premium CSS design.
+Una aplicación CRUD responsiva construida con PHP, Procedimientos Almacenados de MySQL y un diseño CSS premium.
 
-## Features
-- Create, Read, Update, Delete users
-- Uses MySQL Stored Procedures for all database operations
-- Modern, responsive UI with glassmorphism effects
-- Secure PDO database connections
+## Características
+- Crear, Leer, Actualizar, Eliminar usuarios (CRUD)
+- Utiliza Procedimientos Almacenados de MySQL para todas las operaciones de base de datos
+- Interfaz moderna y responsiva con efectos de "glassmorphism"
+- Conexiones seguras a base de datos con PDO
 
-## Setup
-1. Import `database.sql` into your MySQL database.
-2. Configure `db.php` with your database credentials.
-3. Run the application!
+## Instalación
+1. Importa el archivo `database.sql` en tu base de datos MySQL.
+2. Configura `db.php` con tus credenciales de base de datos.
+3. ¡Ejecuta la aplicación!
 
 ---
-**Programmed by PrettyVatt00**
+**Programado por PrettyVatt00**
