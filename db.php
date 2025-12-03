@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'crud_app';
+$dbname = 'crud_papu';
 $username = 'admin'; // Change this if your database user is different
 $password = 'roldanroot'; // Change this if your database password is different
 
