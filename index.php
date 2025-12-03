@@ -1,13 +1,28 @@
 <?php
 require_once 'db.php';
 
-// Fetch users using Stored Procedure
+// Fetch stats
 try {
-    $stmt = $pdo->query("CALL sp_read_users()");
-    $users = $stmt->fetchAll();
-    $stmt->closeCursor(); // Important for multiple procedure calls
+    // Total Users
+    $stmt = $pdo->query("CALL sp_count_users()");
+    $totalUsers = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $stmt->closeCursor();
+
+    // Monthly Stats for Chart
+    $stmt = $pdo->query("CALL sp_get_monthly_stats()");
+    $monthlyStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    // Prepare data for Chart.js
+    $months = [];
+    $counts = [];
+    foreach (array_reverse($monthlyStats) as $stat) {
+        $months[] = date('M Y', strtotime($stat['month'] . '-01'));
+        $counts[] = $stat['count'];
+    }
+
 } catch (PDOException $e) {
-    $error = "Error fetching users: " . $e->getMessage();
+    $error = "Error fetching stats: " . $e->getMessage();
 }
 ?>
 
@@ -16,65 +31,62 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Usuarios - PHP CRUD</title>
+    <title>Dashboard - PHP CRUD Pro</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <?php include 'navbar.php'; ?>
+    
     <div class="container">
         <header>
-            <h1>Gestión de Usuarios</h1>
-            <p class="subtitle">Sistema CRUD con PHP y Procedimientos Almacenados</p>
+            <h1>Dashboard</h1>
+            <p class="subtitle">Resumen general del sistema</p>
         </header>
+
+        <div class="dashboard-grid">
+            <!-- Total Users Card -->
+            <div class="stat-card">
+                <span class="stat-title">Total Usuarios</span>
+                <span class="stat-value"><?= $totalUsers ?></span>
+                <div class="stat-trend trend-up">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    <span>Actualizado hoy</span>
+                </div>
+            </div>
+
+            <!-- Active Users Card (Mocked for demo) -->
+            <div class="stat-card">
+                <span class="stat-title">Usuarios Activos</span>
+                <span class="stat-value"><?= floor($totalUsers * 0.8) ?></span>
+                <div class="stat-trend trend-up">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    <span>+12% vs mes anterior</span>
+                </div>
+            </div>
+
+            <!-- New Users Card (Mocked for demo) -->
+            <div class="stat-card">
+                <span class="stat-title">Nuevos (Mes)</span>
+                <span class="stat-value"><?= end($counts) ?? 0 ?></span>
+                <div class="stat-trend trend-up">
+                    <span>Registro continuo</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="usersChart"></canvas>
+        </div>
 
         <div class="card">
             <div class="header-actions">
-                <h2>Lista de Usuarios</h2>
-                <a href="create.php" class="btn btn-primary">
-                    <span>+</span> Nuevo Usuario
-                </a>
+                <h2>Accesos Rápidos</h2>
             </div>
-
-            <?php if (isset($error)): ?>
-                <div style="color: var(--danger-color); margin-bottom: 1rem;"><?= $error ?></div>
-            <?php endif; ?>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Teléfono</th>
-                            <th>Fecha Registro</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($users)): ?>
-                            <?php foreach ($users as $user): ?>
-                                <tr>
-                                    <td>#<?= htmlspecialchars($user['id']) ?></td>
-                                    <td><?= htmlspecialchars($user['name']) ?></td>
-                                    <td><?= htmlspecialchars($user['email']) ?></td>
-                                    <td><?= htmlspecialchars($user['phone']) ?></td>
-                                    <td><?= date('d/m/Y', strtotime($user['created_at'])) ?></td>
-                                    <td class="actions">
-                                        <a href="edit.php?id=<?= $user['id'] ?>" class="btn btn-sm" style="background: #e0e7ff; color: var(--primary-color);">Editar</a>
-                                        <a href="delete.php?id=<?= $user['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="6" class="empty-state">
-                                    No hay usuarios registrados. ¡Crea el primero!
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+            <div style="display: flex; gap: 1rem;">
+                <a href="create.php" class="btn btn-primary">Crear Nuevo Usuario</a>
+                <a href="users.php" class="btn" style="background: #f1f5f9;">Ver Todos los Usuarios</a>
             </div>
         </div>
 
@@ -82,5 +94,69 @@ try {
             Programmed by PrettyVatt00
         </footer>
     </div>
+
+    <script>
+        const ctx = document.getElementById('usersChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: <?= json_encode($months) ?>,
+                datasets: [{
+                    label: 'Nuevos Usuarios',
+                    data: <?= json_encode($counts) ?>,
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#6366f1',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Crecimiento de Usuarios (Últimos 6 meses)',
+                        align: 'start',
+                        font: {
+                            size: 16,
+                            family: "'Inter', sans-serif",
+                            weight: 600
+                        },
+                        color: '#1e293b',
+                        padding: {
+                            bottom: 20
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            borderDash: [2, 4],
+                            color: '#e2e8f0',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

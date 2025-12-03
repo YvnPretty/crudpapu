@@ -72,6 +72,22 @@ try {
             BEGIN
                 DELETE FROM users WHERE id = p_id;
             END
+        ",
+        'sp_count_users' => "
+            CREATE PROCEDURE sp_count_users()
+            BEGIN
+                SELECT COUNT(*) as total FROM users;
+            END
+        ",
+        'sp_get_monthly_stats' => "
+            CREATE PROCEDURE sp_get_monthly_stats()
+            BEGIN
+                SELECT DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as count 
+                FROM users 
+                GROUP BY month 
+                ORDER BY month DESC 
+                LIMIT 6;
+            END
         "
     ];
 

@@ -6,7 +6,7 @@ $error = '';
 $user = null;
 
 if (!$id) {
-    header("Location: index.php");
+    header("Location: users.php");
     exit;
 }
 
@@ -18,7 +18,7 @@ try {
     $stmt->closeCursor();
 
     if (!$user) {
-        header("Location: index.php");
+        header("Location: users.php");
         exit;
     }
 } catch (PDOException $e) {
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':email' => $email,
                 ':phone' => $phone
             ]);
-            header("Location: index.php");
+            header("Location: users.php");
             exit;
         } catch (PDOException $e) {
             $error = "Error al actualizar: " . $e->getMessage();
@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <?php include 'navbar.php'; ?>
     <div class="container">
         <header>
             <h1>Editar Usuario</h1>
@@ -92,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                     <button type="submit" class="btn btn-primary" style="flex: 1;">Actualizar Usuario</button>
-                    <a href="index.php" class="btn" style="background: #f1f5f9; color: var(--text-color);">Cancelar</a>
+                    <a href="users.php" class="btn" style="background: #f1f5f9; color: var(--text-color);">Cancelar</a>
                 </div>
             </form>
         </div>
