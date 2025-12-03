@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
 $dbname = 'crud_app';
-$username = 'root'; // Change this if your database user is different
-$password = ''; // Change this if your database password is different
+$username = 'admin'; // Change this if your database user is different
+$password = 'roldanroot'; // Change this if your database password is different
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
