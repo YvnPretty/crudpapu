@@ -1,6 +1,6 @@
 # CRUD PHP con Procedimientos Almacenados
 
-Una aplicación CRUD responsiva construida con PHP, Procedimientos Almacenados de MySQL y un diseño CSS premium.
+Una aplicación CRUD responsiva construida con PHP, Procedimientos Almacenados de MySQL y un diseño CSS premium papus.
 
 ## Características
 - Crear, Leer, Actualizar, Eliminar usuarios (CRUD)
