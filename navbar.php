@@ -12,6 +12,7 @@ $cart_count = isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : 0;
                 <span style="background: var(--accent-color); color: #000; padding: 2px 6px; border-radius: 10px; font-size: 0.8rem; font-weight: bold;"><?= $cart_count ?></span>
             <?php endif; ?>
         </a>
+        <a href="admin.php" class="nav-link" style="color: var(--primary-color);">Admin DB</a>
         <?php if(isset($_SESSION['user_id'])): ?>
             <a href="logout.php" class="nav-link">Salir</a>
         <?php else: ?>
